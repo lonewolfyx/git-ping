@@ -1,13 +1,37 @@
-import cac from 'cac'
-import { name, version } from '../package.json'
+import { intro, spinner } from '@clack/prompts'
+import { createMain, defineCommand } from 'citty'
+import { ofetch } from 'ofetch'
+import pc from 'picocolors'
+import { description, name, version } from '../package.json'
 
-const cli = cac(name)
+const main = defineCommand({
+    meta: {
+        name,
+        version,
+        description,
+    },
+    args: {
+        name: {
+            type: 'positional',
+            description: 'Your organization name',
+            required: true,
+        },
+    },
+    async run({ args }) {
+        intro(pc.inverse(' Create Github Organization '))
 
-cli.command('')
-    .option('--test -t', 'arg description', { default: false })
-    .action(() => {
-    })
+        const name = args.name
+        const s = spinner()
+        s.start('Organization name checking...')
 
-cli.help()
-cli.version(version)
-cli.parse()
+        try {
+            await ofetch(`https://ungh.cc/users/${name}`)
+            s.stop(`Error. Currently registered: ${pc.red(name)}`, 200)
+        }
+        catch (e) {
+            s.stop(`Done. you can create this organization name: ${pc.green(name)}`)
+        }
+    },
+})
+
+createMain(main)()
