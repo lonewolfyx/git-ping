@@ -1,7 +1,7 @@
 {
     "name": "git-ping",
     "type": "module",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "packageManager": "pnpm@10.15.1",
     "description": "Github organization name availability check in CLI",
     "author": "lonewolfyx <olddrivero.king@qq.com>",
